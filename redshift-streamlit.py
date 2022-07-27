@@ -1,5 +1,5 @@
 import pandas as pd
-import psycopg2
+#import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy import text
 import plotly.express as px
