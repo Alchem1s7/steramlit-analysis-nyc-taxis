@@ -1,23 +1,14 @@
 import pandas as pd
 import streamlit as st
-import pickle
 import numpy as np
-from pathlib import Path
 
-pkl_path1 = Path(__file__).parents[1] / 'assets/pkl_dis.pkl'
-pkl_path2 = Path(__file__).parents[1] / 'assets/pkl_dur.pkl'
-pkl_path3 = Path(__file__).parents[1] / 'assets/pkl_rate.pkl'
-pkl_path4 = Path(__file__).parents[1] / 'assets/pkl_tolls.pkl'
-pkl_path5 = Path(__file__).parents[1] / 'assets/pkl_air.pkl'
-pkl_path6 = Path(__file__).parents[1] / 'assets/pkl_lin.pkl'
+model_dis = pd.read_pickle('pkl_dis.pkl')
+model_dur = pd.read_pickle('pkl_dur.pkl')
+model_rate = pd.read_pickle('pkl_rate.pkl')
+model_tolls = pd.read_pickle('pkl_tolls.pkl')
+model_air = pd.read_pickle('pkl_air.pkl')
+model_lin = pd.read_pickle('pkl_lin.pkl')
 
-
-model_dis = pickle.load(open(pkl_path1, 'rb'))
-model_dur = pickle.load(open(pkl_path2, 'rb'))
-model_rate = pickle.load(open(pkl_path3, 'rb'))
-model_tolls = pickle.load(open(pkl_path4, 'rb'))
-model_air = pickle.load(open(pkl_path5, 'rb'))
-model_lin = pickle.load( open(pkl_path6, 'rb'))
 
 df = pd.read_parquet('./assets/taxi_trip.parquet', 'pyarrow')
 zones_lookup = pd.read_parquet('./assets/zones.parquet', 'pyarrow')
