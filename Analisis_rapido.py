@@ -11,9 +11,9 @@ df_viajes_mas_frecuentes = pd.read_csv("./main/viajes_frecuentes.csv")
 
 #CREACION DE LAS TABLAS CON PLOTLY Y DESPLEGUE A STREAMLIT
 
-st.title("""Vista rápida de los KPIs & Modelos de Machine learning""")
+st.title("""Vista rápida de los KPIs & Prediccion de demanda""")
 st.header("""Proyecto final yellow taxi trips""")
-st.write("""Esta app tiene por objetivo mostrar una vista rapida de los KPIs, asi como tambien darle la posibilidad al usuario de interactuar con los modelos para la prediccion de la tarifa desde un punto dado a otro, y predecir la demanda de taxis según el Borough""")
+st.write("""Esta app tiene por objetivo mostrar una vista rapida de los KPIs, asi como tambien darle la posibilidad al usuario de interactuar y predecir la demanda de taxis según el Borough""")
 
 #Concentracion de viajes por borough
 
@@ -36,7 +36,7 @@ fig3 = px.bar(df_distancias_mas_largas, x = "zona", y = "distancia_promedio", ti
 st.plotly_chart(fig3)
 with st.expander("See explanation"):
      st.write("""
-     Los 15 viajes mas largos sirven para estudiar las zonas donde la empresa de transporte desplegará principalmente sus servicios. Cabe destacar que las zonas aqui mostradas pertenecen principalmente al distrito de Queens y que tienen un promedio mayor a 20 km en sus viajes.
+     Las 15 zonas con viajes mas largos sirven para estudiar las zonas donde la empresa de transporte desplegará principalmente sus servicios. Cabe destacar que las zonas aqui mostradas pertenecen principalmente al distrito de Queens y que tienen un promedio mayor a 20 km en sus viajes.
      """)
 #Viajes con distancias mas cortas segun punto de partida
 st.title("""Zonas donde la distancia promedio de los viajes es mas pequeña""")

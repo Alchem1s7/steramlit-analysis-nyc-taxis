@@ -40,7 +40,7 @@ font="sans serif"
 
 
 st.set_page_config(page_title = 'Informe',layout = 'wide')
-st.title("""Vista rápida de los KPIs & Modelos de Machine learning""")
+st.title("""Prediccion de demanda""")
 #st.markdown("<h1 style='text-align: center; color:black;'> Predicción de demanda </h1>",unsafe_allow_html=True)
 #st.markdown("<br></br>",unsafe_allow_html=True)
 
