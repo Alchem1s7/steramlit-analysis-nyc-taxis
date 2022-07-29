@@ -1,7 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-
+#
 #CREACION DE LOS DATAFRAMES
 df_trips_por_borough = pd.read_csv("./main/trips_por_borough.csv")
 df_distancias_mas_largas = pd.read_csv("./main/dist_mas_largas.csv")
