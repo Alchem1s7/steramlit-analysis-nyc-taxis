@@ -46,7 +46,7 @@ st.markdown("<br></br>",unsafe_allow_html=True)
 
 # INGESTA DE DATOS
 
-os.chdir("./assets/")
+os.chdir("./pages/assets/")
 
 
 borough_1 = pd.read_csv('borough_1.csv',parse_dates=['PU_Datetime'],index_col='PU_Datetime').asfreq('H')
