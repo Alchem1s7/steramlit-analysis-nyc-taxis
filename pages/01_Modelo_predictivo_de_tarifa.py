@@ -4,12 +4,12 @@ import pickle
 import numpy as np
 from pathlib import Path
 
-pkl_path1 = Path(__file__).parents[1] / './assets/pkl_dis.pkl'
-pkl_path2 = Path(__file__).parents[1] / './assets/pkl_dur.pkl'
-pkl_path3 = Path(__file__).parents[1] / './assets/pkl_rate.pkl'
-pkl_path4 = Path(__file__).parents[1] / './assets/pkl_tolls.pkl'
-pkl_path5 = Path(__file__).parents[1] / './assets/pkl_air.pkl'
-pkl_path6 = Path(__file__).parents[1] / './assets/pkl_lin.pkl'
+pkl_path1 = Path(__file__).parents[1] / 'assets/pkl_dis.pkl'
+pkl_path2 = Path(__file__).parents[1] / 'assets/pkl_dur.pkl'
+pkl_path3 = Path(__file__).parents[1] / 'assets/pkl_rate.pkl'
+pkl_path4 = Path(__file__).parents[1] / 'assets/pkl_tolls.pkl'
+pkl_path5 = Path(__file__).parents[1] / 'assets/pkl_air.pkl'
+pkl_path6 = Path(__file__).parents[1] / 'assets/pkl_lin.pkl'
 
 
 model_dis = pickle.load(open(pkl_path1, 'rb'))
