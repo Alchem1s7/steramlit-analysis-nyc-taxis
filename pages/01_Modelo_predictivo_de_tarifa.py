@@ -3,23 +3,12 @@ import streamlit as st
 import pickle
 import numpy as np
 
-with open("./assets/pkl_dis.pkl", 'rb') as pdis:
-    model_dis = pickle.load(pdis)
-
-with open('./assets/pkl_dur.pkl', 'rb') as pdur:
-    model_dur = pickle.load(pdur)
-
-with open('./assets/pkl_rate.pkl', 'rb') as prate:
-    model_rate = pickle.load(prate)
-
-with open('./assets/pkl_tolls.pkl', 'rb') as ptolls:
-    model_tolls = pickle.load(ptolls)
-
-with open('./assets/pkl_air.pkl', 'rb') as pair:
-    model_air = pickle.load(pair)
-
-with open('./assets/pkl_lin.pkl', 'rb') as plin:
-    model_lin = pickle.load(plin)
+model_dis = pickle.load(open("./assets/pkl_dis.pkl", 'rb'))
+model_dur = pickle.load(open('./assets/pkl_dur.pkl', 'rb'))
+model_rate = pickle.load(open('./assets/pkl_rate.pkl', 'rb'))
+model_tolls = pickle.load(open('./assets/pkl_tolls.pkl', 'rb'))
+model_air = pickle.load(open('./assets/pkl_air.pkl', 'rb'))
+model_lin = pickle.load( open('./assets/pkl_lin.pkl', 'rb'))
 
 df = pd.read_parquet('./assets/taxi_trip.parquet', 'pyarrow')
 zones_lookup = pd.read_parquet('./assets/zones.parquet', 'pyarrow')
