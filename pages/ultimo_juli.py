@@ -2,11 +2,13 @@
 #streamlit run demanda_pred_streamlit.py 
 import os
 import streamlit as st
+
 import pandas as pd
 import numpy as np
 import os
 from datetime import datetime
 from datetime import timedelta
+
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -19,6 +21,8 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from statsmodels.graphics.tsaplots import plot_acf
 from statsmodels.graphics.tsaplots import plot_pacf
 from statsmodels.tsa.statespace.sarimax import SARIMAX
+
+
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
 #from skforecast.ForecasterAutoreg import ForecasterAutoreg
@@ -37,7 +41,7 @@ font="sans serif"
 
 st.set_page_config(page_title = 'Informe',layout = 'wide')
 
-st.markdown("<h1 style='text-align: center; color:black;'> Modelos predictivos </h1>",unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color:black;'> Predicción de demanda </h1>",unsafe_allow_html=True)
 st.markdown("<br></br>",unsafe_allow_html=True)
 
 # INGESTA DE DATOS
@@ -58,8 +62,9 @@ dicc_boro = {lista_boroughs[i]:lista_df_boroughs[i] for i in range(len(lista_bor
 
 
 with st.sidebar:
-    selection = st.selectbox('Seleccione Borough:', lista_boroughs)
-    
+    selection = st.selectbox('Seleccione Borough:', lista_boroughs,index=3)
+ 
+   
 title= selection 
     
 for clave, valor in dicc_boro.items():
@@ -152,6 +157,7 @@ with st.expander("Ver descomposición de la serie y correlaciones"):
         
 # IMPLEMENTACIÓN DEL MODELO
 with st.container():
+    st.markdown(f"<h1 style='text-align:center; color:blue;'> Evaluación del modelo </h1>",unsafe_allow_html=True)    
      
     # Se separan datos de entrenamiento y test
     split_date = pd.Timestamp('2022-03-21')
@@ -281,8 +287,8 @@ with st.container():
     st.markdown(f"<h1 style='text-align:center; color:blue;'> Predicción </h1>",unsafe_allow_html=True)  
     
     
-    horizonte_predict = st.number_input('Horizonte de predicción (días):')
-    horizonte_predict = 7
+    horizonte_predict = st.number_input(label='Horizonte de predicción (días):',value=7)
+    #horizonte_predict = 7
     
     Fecha=pd.date_range(test.index[-1], periods=horizonte_predict+1)
     new_data=pd.DataFrame(Fecha,columns=['Fecha']).set_index('Fecha').asfreq('H')
@@ -322,3 +328,56 @@ with st.container():
             xaxis_title="Pick up datetime")
 
     st.plotly_chart(fig)
+    
+
+with st.container():
+    st.markdown(f"<h1 style='text-align:center; color:blue;'> Predicción de demanda por Borough</h1>",unsafe_allow_html=True)      
+    
+    fecha_inicio_pred= st.date_input( "Ingrese fecha y hora de predicción: ",value = pd.to_datetime('01/04/2022 00:00', format='%d/%m/%Y %H:%M'), min_value = pd.to_datetime('01/04/2022 00:00', format='%d/%m/%Y %H:%M'),max_value= pd.to_datetime('01/05/2022 00:00', format='%d/%m/%Y %H:%M'))
+    fecha_inicio_pred = pd.Timestamp(fecha_inicio_pred.strftime("%Y-%m-%d %H:%M:%S"))
+    
+    hora = st.number_input(label='Hora:',value=15)
+    fecha_inicio_pred = fecha_inicio_pred+pd.Timedelta(int(hora), unit='h')
+    
+    fecha_predict= pd.Timestamp('2022-04-01 00:00:00')
+    def convert_to_hours(delta):
+        total_seconds = delta.total_seconds()
+        hours = str(int(total_seconds // 3600)).zfill(2)
+        minutes = str(int((total_seconds % 3600) // 60)).zfill(2)
+        seconds = str(int(total_seconds % 60)).zfill(2)
+        return int(hours)
+
+
+
+    
+    resultado = pd.DataFrame(columns=['Demanda'])
+
+    for i in lista_boroughs:
+
+      
+
+      forecaster= load('sarimax_{}.py'.format(i))
+      for clave, valor in dicc_boro.items():
+         if clave == i:
+            boro = valor
+
+
+
+      #fecha_inicio_pred=pd.Timestamp('2022-04-01 00:00:00' )
+
+      horizonte_predict = fecha_predict-fecha_inicio_pred
+      Fecha=pd.date_range(start=fecha_inicio_pred, end=fecha_predict, freq='H')
+      new_data=pd.DataFrame(Fecha,columns=['Fecha']).set_index('Fecha').asfreq('H')
+      new_data=new_data[:-1]
+      new_data['Dayofmonth']=  new_data.index.map(lambda row: row.day)
+      new_data['Dayofweek']= new_data.index.map(lambda row: row.dayofweek)
+      new_data['Hour']=  new_data.index.map(lambda row: row.hour)
+      new_data['Precip'] = [boro.Precip.median()]*convert_to_hours(horizonte_predict)
+      new_data['Temp'] = [boro.Temp.median()]*convert_to_hours(horizonte_predict)
+      
+      new_forecast = forecaster.predict(steps= new_data.shape[0], exog=new_data)
+      
+      resultado.loc[i] =  int(np.floor(new_forecast[-1]))
+      resultado.Demanda[resultado.Demanda<0]=0
+
+    st.dataframe(resultado)
